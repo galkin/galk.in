@@ -1,0 +1,7 @@
+{
+  "name": "custom-sass-loader",
+  "version": "0.1.0",
+  "dependencies": {
+    "extract-text-webpack-plugin": "^1.0.1"
+  }
+}
