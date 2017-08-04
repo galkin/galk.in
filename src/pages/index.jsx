@@ -1,24 +1,19 @@
+import Iframe from 'react-iframe';
+
 import React, { Component } from 'react';
-import Heading from 'grommet/components/Heading';
-import Section from 'grommet/components/Section';
-import Box from 'grommet/components/Box';
 
 export default class SubPage extends Component {
   render() {
     return (
-      <Box>
-        <Box>
-          <Section
-            full
-            colorIndex="brand"
-            pad="large"
-            justify="center"
-            align="center"
-          >
-            <Heading tag="h1"><strong>In progress</strong></Heading>
-          </Section>
-        </Box>
-      </Box>
+      <Iframe
+        url="https://docs.google.com/presentation/d/19UjSGLl7_4oKVm5d8Rj_YCiAEmiRVVKlwcFZmSP-x6Y/embed?start=false&loop=false&delayms=3000"
+        frameborder="0"
+        width="100%"
+        height="100%"
+        allowfullscreen="true"
+        mozallowfullscreen="true"
+        webkitallowfullscreen="true"
+      />
     );
   }
 }
