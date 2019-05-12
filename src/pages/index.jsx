@@ -6,7 +6,7 @@ export default class SubPage extends Component {
   render() {
     return (
       <Iframe
-        url="https://docs.google.com/presentation/d/e/2PACX-1vS7kWZXJbl5jId808nsUDn_4LG5MRMazAFvXh06dYLW941kkXORQlWnz4uhoAxdXbMhm00nix6lRXhg/embed?start=false&loop=false&delayms=3000"
+        url="https://docs.google.com/presentation/d/e/2PACX-1vR2OHrrPX9e7Y2ctD7S92tJTWNIjcc8GohcCkuzT4n8jB6oIxHxW0OKw3JdSpCDZp3vI0rjgdDPTx75/embed?start=false&loop=false&delayms=3000"
         frameborder="0"
         width="100%"
         height="100%"
