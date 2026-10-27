@@ -1,0 +1,63 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to main supersedes the run in flight, so the older one is
+# cancelled rather than finished: the commit it would have deployed is no
+# longer the head. A Hosting release is atomic, so a cancelled upload never
+# serves a half-site, and the next run deploys the newer commit.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy Firebase Hosting
+    # Only main deploys. A manual run from another branch would mint a token
+    # galkin/infra (`workspaces/galk-in/deployer.tf`) does not admit, so it
+    # is skipped here rather than left to fail at authentication.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+
+    # `id-token` is what Workload Identity Federation exchanges for Google
+    # Cloud credentials.
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      # The site is plain files in `public/` with no build for now, so there is
+      # no package.json; the Firebase CLI runs through npx, pinned to the
+      # version galkin/galkin.tech uses. A generator adds its build step here.
+      - name: Install Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # The project id, provider and service account are written into the
+      # repository's Actions variables by galkin/infra (`workspaces/galk-in/github.tf`).
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_FIREBASE_SERVICE_ACCOUNT }}
+          create_credentials_file: true
+
+      - name: Deploy Firebase Hosting
+        run: >-
+          npx --yes firebase-tools@15.34.0 deploy
+          --only hosting
+          --project "${{ vars.GCP_PROJECT_ID }}"
+          --non-interactive
