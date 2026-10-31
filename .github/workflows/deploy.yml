@@ -43,7 +43,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: 26
 
       # The project id, provider and service account are written into the
       # repository's Actions variables by galkin/infra (`workspaces/galk-in/github.tf`).
@@ -57,7 +57,7 @@ jobs:
 
       - name: Deploy Firebase Hosting
         run: >-
-          npx --yes firebase-tools@15.34.0 deploy
+          npx --yes firebase-tools@15.34.2 deploy
           --only hosting
           --project "${{ vars.GCP_PROJECT_ID }}"
           --non-interactive
